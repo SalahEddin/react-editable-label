@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import edit_icon from './edit_icon.png' // relative path to image 
 
 export default class EditableLabel extends React.Component {
     constructor(props) {
@@ -7,7 +8,8 @@ export default class EditableLabel extends React.Component {
 
         this.state = {
         	isEditing: this.props.isEditing || false,
-			text: this.props.text || "",
+            text: this.props.text || "",
+            editIconVisibility: "collapse"
         };
         
         this._handleFocus = this._handleFocus.bind(this);
@@ -25,7 +27,7 @@ export default class EditableLabel extends React.Component {
 	        	this.props.onFocus(this.state.text);
             }
         }
-    
+        this._onLabelMouseOut()
     	this.setState({
         	isEditing: !this.state.isEditing,
         });
@@ -34,6 +36,22 @@ export default class EditableLabel extends React.Component {
     _handleChange() {
     	this.setState({
         	text: this.textInput.value,
+        });
+    }
+
+    _onLabelMouseOver(){
+        this.setState({
+            editIconVisibility: "visible",
+            labelBackgroundColor: "grey",
+            boxShadowStyle: "1px 1px 10px #333",
+        });
+    }
+
+    _onLabelMouseOut(){
+        this.setState({
+            editIconVisibility: "collapse",
+            labelBackgroundColor: "transparent",
+            boxShadowStyle: "None",
         });
     }
 
@@ -63,13 +81,31 @@ export default class EditableLabel extends React.Component {
     
         return <div>
             <label className={this.props.labelClassName}
+                onMouseOver={() => this._onLabelMouseOver()}
+                onMouseLeave={()=> this._onLabelMouseOut()}
                 onClick={this._handleFocus}
                 style={{
+                    backgroundColor: this.state.labelBackgroundColor,
                 	fontSize: this.props.labelFontSize,
                     fontWeight: this.props.labelFontWeight,
+                    borderRadius: "5px",
+                    boxShadow: this.state.boxShadowStyle,
+                    paddingLeft: "10px"
                 }}>
                 {this.state.text}
+                <span>
+            <img src={edit_icon} 
+            alt="edit" 
+            height="auto" 
+            width="25" 
+            style={{
+                marginLeft: "10px",
+                backgroundColor:"grey",
+                visibility: this.state.editIconVisibility
+                }}/>
+                </span>
             </label>
+            
         </div>;
     }
 }
@@ -95,6 +131,3 @@ EditableLabel.propTypes = {
     onFocus: PropTypes.func,
     onFocusOut: PropTypes.func
 };
-
-
-
