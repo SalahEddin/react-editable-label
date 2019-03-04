@@ -6,7 +6,7 @@ The `<EditableLabel />` allows the user to simply click and edit text inline. It
 ![example](https://imgur.com/xWXBUdf.gif )
 
 # Installation
-`npm install --save react-editable-label`
+`npm install --save react-simple-editlabel`
 
 # Component props
 _* Required_ 
@@ -34,7 +34,7 @@ _* Required_
 ```javascript
 import React from 'react';
 import ReactDOM from 'react-dom';
-import EditableLabel from 'react-editable-label';
+import EditableLabel from 'react-simple-editlabel';
 
 class App extends React.Component {
     constructor(props){
