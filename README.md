@@ -3,10 +3,10 @@ This is an inline, editable text/label component built in React.
 
 The `<EditableLabel />` allows the user to simply click and edit text inline. It consists of a `<label>` element to display the unedited text and an `<input />` element to allow editing.
 
-![example](https://i.imgur.com/pvvQWU3.gif )
+![example](https://imgur.com/xWXBUdf.gif )
 
 # Installation
-`npm install --save react-inline-editing`
+`npm install --save react-editable-label`
 
 # Component props
 _* Required_ 
@@ -28,7 +28,7 @@ _* Required_
 | inputBorderWidth | string | Border width for the input in editing mode
 | onFocus | function | Callback for text focusing. Parameter(s): `text`
 | onFocusOut | function | Callback for focus leaving editor. Parameter(s): `text`
-
+| raiseOnFocusOutOnEsc | bool | Whether to call `onFocusOut` when escpe is clicked
 
 # Example
 ```javascript
@@ -74,3 +74,5 @@ ReactDOM.render(
   document.getElementById('container')
 );
 ```
+
+### Based on the work of [cheekujha](https://github.com/cheekujha/react-inline-edition)
