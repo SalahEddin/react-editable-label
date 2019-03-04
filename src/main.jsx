@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import edit_icon from './res/edit_icon.png' // relative path to image 
 
+const TAB_KEY_CODE = 9;
+const ENTER_KEY_CODE = 13;
+const ESCAPE_KEY_CODE = 27;
+
 export default class EditableLabel extends React.Component {
     constructor(props) {
         super(props);
@@ -9,17 +13,33 @@ export default class EditableLabel extends React.Component {
         this.state = {
         	isEditing: this.props.isEditing || false,
             text: this.props.text || "",
+            prevText: this.props.text || "",
             editIconVisibility: "collapse"
         };
         
         this._handleFocus = this._handleFocus.bind(this);
-        this._handleChange = this._handleChange.bind(this);
+		this._handleChange = this._handleChange.bind(this);
+		this._handleKeyDown = this._handleKeyDown.bind(this);
     }
     
-    _handleFocus() {
+    _handleFocus(escaped=false) {
     	if(this.state.isEditing) {
         	if(typeof this.props.onFocusOut === 'function') {
-        		this.props.onFocusOut(this.state.text);
+               if(escaped){
+                   // rest the text state and 
+                   this.setState({
+                    text: this.state.prevText,
+                   });
+                   if(this.props.raiseOnFocusOutOnEsc){
+                    this.props.onFocusOut(this.state.text);
+                   }
+               }
+               else{
+                    this.setState({
+                    prevText: this.state.text,
+                   });
+                   this.props.onFocusOut(this.state.text);
+               }
             }
         }
         else {
@@ -54,6 +74,23 @@ export default class EditableLabel extends React.Component {
             boxShadowStyle: "None",
         });
     }
+    
+    _handleEnterKey(){
+        this._handleFocus();
+    }
+
+    _handleEscapeKey(){
+        this._handleFocus(true);
+    }
+
+    _handleKeyDown(e){
+        if(e.keyCode === ENTER_KEY_CODE || e.keyCode === TAB_KEY_CODE){
+            this._handleEnterKey();
+        }
+        else if(e.keyCode === ESCAPE_KEY_CODE){
+            this._handleEscapeKey();
+        }
+    }
 
     render() {
     	if(this.state.isEditing) {
@@ -63,7 +100,8 @@ export default class EditableLabel extends React.Component {
                     ref={(input) => { this.textInput = input; }}
                     value={this.state.text} 
                     onChange={this._handleChange}
-                    onBlur={this._handleFocus}
+					onBlur={this._handleFocus}
+					onKeyDown={this._handleKeyDown}
                     style={{ 
                     	width: this.props.inputWidth,
                         height: this.props.inputHeight,
@@ -83,7 +121,8 @@ export default class EditableLabel extends React.Component {
             <label className={this.props.labelClassName}
                 onMouseOver={() => this._onLabelMouseOver()}
                 onMouseLeave={()=> this._onLabelMouseOut()}
-                onClick={this._handleFocus}
+				onClick={this._handleFocus}
+				onKeyDown={this._handleKeyDown}
                 style={{
                     backgroundColor: this.state.labelBackgroundColor,
                 	fontSize: this.props.labelFontSize,
@@ -129,5 +168,11 @@ EditableLabel.propTypes = {
     inputBorderWidth: PropTypes.string,
 
     onFocus: PropTypes.func,
-    onFocusOut: PropTypes.func
+    onFocusOut: PropTypes.func,
+    raiseOnFocusOutOnEsc: PropTypes.bool
 };
+
+EditableLabel.defaultProps = {
+    raiseOnFocusOutOnEsc: false,
+}
+
