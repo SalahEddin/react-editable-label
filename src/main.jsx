@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import edit_icon from './edit_icon.png' // relative path to image 
+import edit_icon from './res/edit_icon.png' // relative path to image 
 
 export default class EditableLabel extends React.Component {
     constructor(props) {
