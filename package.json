@@ -1,6 +1,6 @@
 {
-  "name": "react-inline-editing",
-  "version": "1.0.9",
+  "name": "react-editable-label",
+  "version": "1.0.2",
   "description": "An inline, customizable and editable text component built in React.",
   "main": "./dist/main.bundle.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bfischer/react-inline-editing.git"
+    "url": "git+https://github.com/salaheddin/react-editable-label.git"
   },
   "keywords": [
     "react",
@@ -28,7 +28,7 @@
   "author": "Blake Fischer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bfischer/react-inline-editing/issues"
+    "url": "https://github.com/salaheddin/react-editable-label/issues"
   },
   "homepage": "",
   "dependencies": {
