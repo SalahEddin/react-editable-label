@@ -138,14 +138,12 @@ export default class EditableLabel extends React.Component {
           }}
         >
           {this.state.text}
-          <span>
+          <span style={{ paddingLeft: "8px", display: "inline-block" }}>
             <img
               src={edit_icon}
               alt="edit"
-              display="inline-block"
               width="20px"
               style={{
-                marginLeft: "10px",
                 backgroundColor: "grey",
                 visibility: this.state.editIconVisibility
               }}
