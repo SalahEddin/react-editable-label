@@ -3,9 +3,10 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 
 import EditableLabel from "./index";
+import './index.css';
 
 storiesOf("Editable", module).add("label", () => (
-  <div style={{width:'200px', height:'100px', paddingLeft:'10px'}}>
+  <div style={{width:'200px', height:'150px', paddingLeft:'10px'}}>
     <EditableLabel
       text="Hello!"
       labelClassName="myLabelClass"

@@ -39,7 +39,7 @@ function EditableLabel(props) {
     prevText: props.text || '',
     editIconVisibility: 'collapse'
   });
-  const [text, setText] = useState(props.text || '')
+  const [text, setText] = useState(props.text || '');
 
   function handleFocus(escaped = false) {
     if (state.isEditing) {
@@ -47,7 +47,7 @@ function EditableLabel(props) {
 
       if (escaped) {
         // rest the text state and
-        setText(state.prevText)
+        setText(state.prevText);
         if (props.raiseOnFocusOutOnEsc) {
           props.onFocusOut(text);
         }
@@ -70,7 +70,7 @@ function EditableLabel(props) {
   }
 
   function handleChange(event) {
-    setText(event.target.value)
+    setText(event.target.value);
   }
 
   function onLabelMouseOver() {
@@ -99,62 +99,59 @@ function EditableLabel(props) {
     }
   }
 
-  if (state.isEditing) {
-    return (
-      <div>
-        <input
-          type="text"
-          className={props.inputClassName}
-          value={text}
-          onChange={event => handleChange(event)}
-          onBlur={() => handleFocus()}
-          onKeyDown={e => handleKeyDown(e)}
-          style={{
-            width: props.inputWidth,
-            fontSize: props.inputFontSize,
-            fontWeight: props.inputFontWeight,
-            borderWidth: props.inputBorderWidth
-          }}
-          maxLength={props.inputMaxLength}
-          placeholder={props.inputPlaceHolder}
-          tabIndex={props.inputTabIndex}
-          autoFocus
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <label
+  return state.isEditing ? (
+    <input
+      type="text"
+      className={props.inputClassName}
+      value={text}
+      onChange={event => handleChange(event)}
+      onBlur={() => handleFocus()}
+      onKeyDown={e => handleKeyDown(e)}
+      style={{
+        width: props.inputWidth,
+        fontSize: props.inputFontSize,
+        fontWeight: props.inputFontWeight,
+        borderWidth: props.inputBorderWidth
+      }}
+      maxLength={props.inputMaxLength}
+      placeholder={props.inputPlaceHolder}
+      tabIndex={props.inputTabIndex}
+      autoFocus
+    />
+  ) : (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: state.labelBackgroundColor,
+          fontSize: props.labelFontSize,
+          fontWeight: props.labelFontWeight,
+          borderRadius: '5px',
+          boxShadow: state.boxShadowStyle,
+          width: '100%'
+      }}
+    >
+      <span
         className={props.labelClassName}
         onMouseOver={() => onLabelMouseOver()}
         onMouseLeave={() => onLabelMouseOut()}
         onClick={() => handleFocus()}
         onKeyDown={e => handleKeyDown(e)}
-        style={{
-          backgroundColor: state.labelBackgroundColor,
-          fontSize: props.labelFontSize,
-          fontWeight: props.labelFontWeight,
-          borderRadius: '5px',
-          boxShadow: state.boxShadowStyle,
-          width: 'auto',
-          display: 'block'
-        }}
       >
         {text}
-        <span style={{ paddingLeft: '8px', display: 'inline-block' }}>
-          <img
-            src={edit_icon}
-            alt="edit"
-            width="20px"
-            style={{
-              backgroundColor: 'grey',
-              visibility: state.editIconVisibility
-            }}
-          />
-        </span>
-      </label>
+      </span>
+      <div style={{ width: '100%', height: '100%' }}>
+      <img
+        src={edit_icon}
+        alt="edit"
+        width="100%"
+        height="100%"
+        style={{
+          backgroundColor: 'grey',
+          visibility: state.editIconVisibility
+        }}
+      />
+      </div>
     </div>
   );
 }
