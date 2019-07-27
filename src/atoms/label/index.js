@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import edit_icon from "./images/edit_icon.png"; // relative path to image
-import './index.css'
+import "./index.css";
 
 const TAB_KEY_CODE = 9;
 const ENTER_KEY_CODE = 13;
@@ -106,7 +106,6 @@ export default class EditableLabel extends React.Component {
             onKeyDown={this._handleKeyDown}
             style={{
               width: this.props.inputWidth,
-              height: this.props.inputHeight,
               fontSize: this.props.inputFontSize,
               fontWeight: this.props.inputFontWeight,
               borderWidth: this.props.inputBorderWidth
@@ -134,7 +133,8 @@ export default class EditableLabel extends React.Component {
             fontWeight: this.props.labelFontWeight,
             borderRadius: "5px",
             boxShadow: this.state.boxShadowStyle,
-            paddingLeft: "10px"
+            width: "auto",
+            display: "block"
           }}
         >
           {this.state.text}
@@ -142,8 +142,8 @@ export default class EditableLabel extends React.Component {
             <img
               src={edit_icon}
               alt="edit"
-              height="auto"
-              width="25"
+              display="inline-block"
+              width="55px"
               style={{
                 marginLeft: "10px",
                 backgroundColor: "grey",
@@ -169,7 +169,6 @@ EditableLabel.propTypes = {
   inputPlaceHolder: PropTypes.string,
   inputTabIndex: PropTypes.number,
   inputWidth: PropTypes.string,
-  inputHeight: PropTypes.string,
   inputFontSize: PropTypes.string,
   inputFontWeight: PropTypes.string,
   inputClassName: PropTypes.string,

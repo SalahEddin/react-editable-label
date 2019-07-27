@@ -21,7 +21,6 @@ _* Required_
 | inputMaxLength | number | Max length for the input in editing mode
 | inputPlaceHolder | string | Placeholder for the input in editing mode
 | inputWidth | string | Width of the input in editing mode
-| inputHeight | string | Height of the input in editing mode
 | inputFontSize | string | Font size for the input in editing mode
 | inputFontWeight | string | Font weight for the input in editing mode 
 | inputClassName | string | Class name for the input editor's styling
@@ -58,7 +57,6 @@ class App extends React.Component {
                 labelClassName='myLabelClass'
                 inputClassName='myInputClass'
                 inputWidth='200px'
-                inputHeight='25px'
                 inputMaxLength='50'
                 labelFontWeight='bold'
                 inputFontWeight='bold'
