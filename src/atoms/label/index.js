@@ -1,182 +1,162 @@
-import React from "react";
-import PropTypes from "prop-types";
-import edit_icon from "./images/edit_icon.png"; // relative path to image
-import "./index.css";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import edit_icon from './images/edit_icon.png'; // relative path to image
+import './index.css';
 
 const TAB_KEY_CODE = 9;
 const ENTER_KEY_CODE = 13;
 const ESCAPE_KEY_CODE = 27;
 
-export default class EditableLabel extends React.Component {
-  constructor(props) {
-    super(props);
+function EditableLabel(props) {
+  EditableLabel.propTypes = {
+    text: PropTypes.string.isRequired,
+    isEditing: PropTypes.bool,
 
-    this.state = {
-      isEditing: this.props.isEditing || false,
-      text: this.props.text || "",
-      prevText: this.props.text || "",
-      editIconVisibility: "collapse"
-    };
+    labelClassName: PropTypes.string,
+    labelFontSize: PropTypes.string,
+    labelFontWeight: PropTypes.string,
 
-    this._handleFocus = this._handleFocus.bind(this);
-    this._handleChange = this._handleChange.bind(this);
-    this._handleKeyDown = this._handleKeyDown.bind(this);
-  }
+    inputMaxLength: PropTypes.number,
+    inputPlaceHolder: PropTypes.string,
+    inputTabIndex: PropTypes.number,
+    inputWidth: PropTypes.string,
+    inputFontSize: PropTypes.string,
+    inputFontWeight: PropTypes.string,
+    inputClassName: PropTypes.string,
+    inputBorderWidth: PropTypes.string,
 
-  _handleFocus(escaped = false) {
-    if (this.state.isEditing) {
-      if (typeof this.props.onFocusOut === "function") {
-        if (escaped) {
-          // rest the text state and
-          this.setState({
-            text: this.state.prevText
-          });
-          if (this.props.raiseOnFocusOutOnEsc) {
-            this.props.onFocusOut(this.state.text);
-          }
-        } else {
-          this.setState({
-            prevText: this.state.text
-          });
-          this.props.onFocusOut(this.state.text);
+    onFocus: PropTypes.func,
+    onFocusOut: PropTypes.func,
+    raiseOnFocusOutOnEsc: PropTypes.bool
+  };
+
+  EditableLabel.defaultProps = {
+    raiseOnFocusOutOnEsc: false
+  };
+
+  const [state, setState] = useState({
+    isEditing: props.isEditing || false,
+    prevText: props.text || '',
+    editIconVisibility: 'collapse'
+  });
+  const [text, setText] = useState(props.text || '')
+
+  function handleFocus(escaped = false) {
+    if (state.isEditing) {
+      if (typeof props.onFocusOut !== 'function') return;
+
+      if (escaped) {
+        // rest the text state and
+        setText(state.prevText)
+        if (props.raiseOnFocusOutOnEsc) {
+          props.onFocusOut(text);
         }
+      } else {
+        setState({
+          ...state,
+          prevText: text
+        });
+        props.onFocusOut(text);
       }
     } else {
-      if (typeof this.props.onFocus === "function") {
-        this.props.onFocus(this.state.text);
-      }
+      if (typeof props.onFocus !== 'function') return;
+      props.onFocus(text);
     }
-    this._onLabelMouseOut();
-    this.setState({
-      isEditing: !this.state.isEditing
+    onLabelMouseOut();
+    setState({
+      ...state,
+      isEditing: !state.isEditing
     });
   }
 
-  _handleChange() {
-    this.setState({
-      text: this.textInput.value
+  function handleChange(event) {
+    setText(event.target.value)
+  }
+
+  function onLabelMouseOver() {
+    setState({
+      ...state,
+      editIconVisibility: 'visible',
+      labelBackgroundColor: 'grey',
+      boxShadowStyle: '1px 1px 10px #333'
     });
   }
 
-  _onLabelMouseOver() {
-    this.setState({
-      editIconVisibility: "visible",
-      labelBackgroundColor: "grey",
-      boxShadowStyle: "1px 1px 10px #333"
+  function onLabelMouseOut() {
+    setState({
+      ...state,
+      editIconVisibility: 'collapse',
+      labelBackgroundColor: 'transparent',
+      boxShadowStyle: 'None'
     });
   }
 
-  _onLabelMouseOut() {
-    this.setState({
-      editIconVisibility: "collapse",
-      labelBackgroundColor: "transparent",
-      boxShadowStyle: "None"
-    });
-  }
-
-  _handleEnterKey() {
-    this._handleFocus();
-  }
-
-  _handleEscapeKey() {
-    this._handleFocus(true);
-  }
-
-  _handleKeyDown(e) {
+  function handleKeyDown(e) {
     if (e.keyCode === ENTER_KEY_CODE || e.keyCode === TAB_KEY_CODE) {
-      this._handleEnterKey();
+      handleFocus();
     } else if (e.keyCode === ESCAPE_KEY_CODE) {
-      this._handleEscapeKey();
+      handleFocus(true);
     }
   }
 
-  render() {
-    if (this.state.isEditing) {
-      return (
-        <div>
-          <input
-            type="text"
-            className={this.props.inputClassName}
-            ref={input => {
-              this.textInput = input;
-            }}
-            value={this.state.text}
-            onChange={this._handleChange}
-            onBlur={this._handleFocus}
-            onKeyDown={this._handleKeyDown}
-            style={{
-              width: this.props.inputWidth,
-              fontSize: this.props.inputFontSize,
-              fontWeight: this.props.inputFontWeight,
-              borderWidth: this.props.inputBorderWidth
-            }}
-            maxLength={this.props.inputMaxLength}
-            placeholder={this.props.inputPlaceHolder}
-            tabIndex={this.props.inputTabIndex}
-            autoFocus
-          />
-        </div>
-      );
-    }
-
+  if (state.isEditing) {
     return (
       <div>
-        <label
-          className={this.props.labelClassName}
-          onMouseOver={() => this._onLabelMouseOver()}
-          onMouseLeave={() => this._onLabelMouseOut()}
-          onClick={this._handleFocus}
-          onKeyDown={this._handleKeyDown}
+        <input
+          type="text"
+          className={props.inputClassName}
+          value={text}
+          onChange={event => handleChange(event)}
+          onBlur={() => handleFocus()}
+          onKeyDown={e => handleKeyDown(e)}
           style={{
-            backgroundColor: this.state.labelBackgroundColor,
-            fontSize: this.props.labelFontSize,
-            fontWeight: this.props.labelFontWeight,
-            borderRadius: "5px",
-            boxShadow: this.state.boxShadowStyle,
-            width: "auto",
-            display: "block"
+            width: props.inputWidth,
+            fontSize: props.inputFontSize,
+            fontWeight: props.inputFontWeight,
+            borderWidth: props.inputBorderWidth
           }}
-        >
-          {this.state.text}
-          <span style={{ paddingLeft: "8px", display: "inline-block" }}>
-            <img
-              src={edit_icon}
-              alt="edit"
-              width="20px"
-              style={{
-                backgroundColor: "grey",
-                visibility: this.state.editIconVisibility
-              }}
-            />
-          </span>
-        </label>
+          maxLength={props.inputMaxLength}
+          placeholder={props.inputPlaceHolder}
+          tabIndex={props.inputTabIndex}
+          autoFocus
+        />
       </div>
     );
   }
+
+  return (
+    <div>
+      <label
+        className={props.labelClassName}
+        onMouseOver={() => onLabelMouseOver()}
+        onMouseLeave={() => onLabelMouseOut()}
+        onClick={() => handleFocus()}
+        onKeyDown={e => handleKeyDown(e)}
+        style={{
+          backgroundColor: state.labelBackgroundColor,
+          fontSize: props.labelFontSize,
+          fontWeight: props.labelFontWeight,
+          borderRadius: '5px',
+          boxShadow: state.boxShadowStyle,
+          width: 'auto',
+          display: 'block'
+        }}
+      >
+        {text}
+        <span style={{ paddingLeft: '8px', display: 'inline-block' }}>
+          <img
+            src={edit_icon}
+            alt="edit"
+            width="20px"
+            style={{
+              backgroundColor: 'grey',
+              visibility: state.editIconVisibility
+            }}
+          />
+        </span>
+      </label>
+    </div>
+  );
 }
 
-EditableLabel.propTypes = {
-  text: PropTypes.string.isRequired,
-  isEditing: PropTypes.bool,
-
-  labelClassName: PropTypes.string,
-  labelFontSize: PropTypes.string,
-  labelFontWeight: PropTypes.string,
-
-  inputMaxLength: PropTypes.number,
-  inputPlaceHolder: PropTypes.string,
-  inputTabIndex: PropTypes.number,
-  inputWidth: PropTypes.string,
-  inputFontSize: PropTypes.string,
-  inputFontWeight: PropTypes.string,
-  inputClassName: PropTypes.string,
-  inputBorderWidth: PropTypes.string,
-
-  onFocus: PropTypes.func,
-  onFocusOut: PropTypes.func,
-  raiseOnFocusOutOnEsc: PropTypes.bool
-};
-
-EditableLabel.defaultProps = {
-  raiseOnFocusOutOnEsc: false
-};
+export default EditableLabel;
