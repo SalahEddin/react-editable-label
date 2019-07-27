@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import edit_icon from "./images/edit_icon.png"; // relative path to image
+import './index.css'
 
 const TAB_KEY_CODE = 9;
 const ENTER_KEY_CODE = 13;
