@@ -143,7 +143,7 @@ export default class EditableLabel extends React.Component {
               src={edit_icon}
               alt="edit"
               display="inline-block"
-              width="55px"
+              width="20px"
               style={{
                 marginLeft: "10px",
                 backgroundColor: "grey",
